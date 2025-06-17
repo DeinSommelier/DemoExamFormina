@@ -36,17 +36,17 @@ namespace WpfDemoExam
                 MessageBox.Show("Значение обоих полей должны быть заполнены!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
             login = login.Trim();
             password = password.Trim();
 
             using (var context = new HotelManagementEntities1())
             {
-                var user = context.Users
-                    .Where(u => u.username == login && u.password == password).FirstOrDefault();
+                var user = context.Users.FirstOrDefault(u => u.username == login);
 
                 if (user == null)
                 {
-                    MessageBox.Show("Вы ввели неправильные логин и пароль. Проверьте введенные данные и попробуйте еще раз.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Пользователь с таким логином не найден.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -55,37 +55,15 @@ namespace WpfDemoExam
                     MessageBox.Show("Вы заблокированы. Обратитесь к администратору.", "Доступ запрещен", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                if (user.lastLoginDate != null && (DateTime.Now - user.lastLoginDate.Value).TotalDays > 30 && user.role != "admin")
-                {
-                    user.isLocked = true;
-                    context.SaveChanges();
-                    MessageBox.Show("Ваша учетная запись заблокирована из-за длительного отсутствия входа. Обратитесь к администратору.", "Доступ запрещен", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
+
                 if (user.password == password)
                 {
                     user.lastLoginDate = DateTime.Now;
                     user.FailedLoginAttempts = 0;
                     context.SaveChanges();
-                    MessageBox.Show("Вы успешно авторизовались !", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Вы успешно авторизовались!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    if (user.firstLogin == true)
-                    {
-                    }
-                    else
-                    {
-                        if (user.role == "admin")
-                        {
-                            AdminWindow adminWindow = new AdminWindow();
-                            adminWindow.Show();
-                        }
-                        else
-                        {
-                            MainWindow userWindow = new MainWindow();
-                            userWindow.Show();
-                        }
-                        this.Close();
-                    }
+                    // Далее логика открытия окна
                 }
                 else
                 {
@@ -93,12 +71,12 @@ namespace WpfDemoExam
                     if (user.FailedLoginAttempts >= 3)
                     {
                         user.isLocked = true;
-                        MessageBox.Show("Вы заблокированы из-за 3 неудачных попыток входа. Обратитесь к администратору.", "Доступ запрещен", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show("Вы заблокированы из-за 3 неудачных попыток входа.", "Доступ запрещен", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     else
                     {
                         int attemptsLeft = 3 - (user.FailedLoginAttempts ?? 0);
-                        MessageBox.Show($"Неправильный логин или пароль. Осталось попыток: {attemptsLeft}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show($"Неправильный пароль. Осталось попыток: {attemptsLeft}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     context.SaveChanges();
                 }
