@@ -63,7 +63,9 @@ namespace WpfDemoExam
                     context.SaveChanges();
                     MessageBox.Show("Вы успешно авторизовались!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Далее логика открытия окна
+                    AdminWindow adminWindow = new AdminWindow();
+                    adminWindow.Show();
+                    this.Close();
                 }
                 else
                 {
