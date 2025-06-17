@@ -37,19 +37,36 @@ namespace WpfDemoExam
 
                     foreach (var user in users)
                     {
-                        var listBoxItem = new ListBoxItem
+                        var userItem = new StackPanel
                         {
-                            Content = $"{user.lastname}, {user.firstname} ({user.username}) - {user.email}",
-                            Tag = user.id
+                            Orientation = Orientation.Horizontal,
+                            Margin = new Thickness(5)
                         };
 
-                        UsersListBox.Items.Add(listBoxItem);
+                        var textBlock = new TextBlock
+                        {
+                            Text = $"{user.lastname}, {user.firstname} ({user.username}) - {user.email} — ",
+                            VerticalAlignment = VerticalAlignment.Center
+                        };
+
+                        var checkBox = new CheckBox
+                        {
+                            Content = "Заблокирован",
+                            IsChecked = user.isLocked,
+                            Tag = user.id,
+                            VerticalAlignment = VerticalAlignment.Center
+                        };
+                        checkBox.Click += LockUserCheckbox_Click;
+
+                        userItem.Children.Add(textBlock);
+                        userItem.Children.Add(checkBox);
+                        UsersListBox.Items.Add(userItem);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки пользователей: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Произошла ошибка при загрузке пользователей: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -62,56 +79,93 @@ namespace WpfDemoExam
 
         private void OpenChangePasswordWindow(object sender, RoutedEventArgs e)
         {
-            if (UsersListBox.SelectedItem is ListBoxItem selectedItem)
+            if (UsersListBox.SelectedItem is StackPanel selectedItem)
             {
-                var userId = (int)selectedItem.Tag;
-                var changePasswordWindow = new ChangePasswordWindow(userId);
-                changePasswordWindow.ShowDialog();
-                LoadUsers();
+                var checkBox = selectedItem.Children.OfType<CheckBox>().FirstOrDefault();
+                if (checkBox != null)
+                {
+                    var userId = (int)checkBox.Tag;
+                    var changePassword = new ChangePasswordWindow(userId);
+                    changePassword.ShowDialog();
+                    LoadUsers();
+                    this.Close();
+                    return;
+                }
             }
-            else
+
+            MessageBox.Show("Пожалуйста, выберите пользователя для изменения пароля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private async void DeleteUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (UsersListBox.SelectedItem is StackPanel selectedItem)
             {
-                MessageBox.Show("Выберите пользователя для изменения пароля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var checkBox = selectedItem.Children.OfType<CheckBox>().FirstOrDefault();
+                if (checkBox != null)
+                {
+                    var userId = (int)checkBox.Tag;
+
+                    var result = MessageBox.Show("Вы уверены, что хотите удалить этого пользователя?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            using (var context = new HotelManagementEntities1())
+                            {
+                                var user = await context.Users.FirstOrDefaultAsync(u => u.id == userId);
+                                if (user != null)
+                                {
+                                    context.Users.Remove(user);
+                                    await context.SaveChangesAsync(); MessageBox.Show("Пользователь успешно удален.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    LoadUsers();
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Произошла ошибка при удалении пользователя: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+
+                    return;
+                }
+            }
+
+            MessageBox.Show("Пожалуйста, выберите пользователя для удаления.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private async void LockUserCheckbox_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                var userId = (int)checkBox.Tag;
+                bool isLocked = checkBox.IsChecked ?? false;
+                await UpdateUserLockStatus(userId, isLocked);
+                LoadUsers();
             }
         }
 
-        private async void SaveChangesButton_Click(object sender, RoutedEventArgs e)
+        private async Task UpdateUserLockStatus(int userId, bool isLocked)
         {
-            if (UsersListBox.SelectedItem is ListBoxItem selectedItem)
+            try
             {
-                var userId = (int)selectedItem.Tag;
-
-                var result = MessageBox.Show("Удалить пользователя?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
+                using (var context = new HotelManagementEntities1())
                 {
-                    try
+                    var user = await context.Users.FirstOrDefaultAsync(u => u.id == userId);
+                    if (user != null)
                     {
-                        using (var context = new HotelManagementEntities1())
-                        {
-                            var user = await context.Users.FirstOrDefaultAsync(u => u.id == userId);
-                            if (user != null)
-                            {
-                                context.Users.Remove(user);
-                                await context.SaveChangesAsync();
-                                MessageBox.Show("Пользователь удалён.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                                LoadUsers();
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Ошибка при удалении пользователя: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        user.isLocked = isLocked;
+                        await context.SaveChangesAsync();
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Выберите пользователя для удаления.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Произошла ошибка при обновлении статуса блокировки: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
 }
-
 
 //using System;
 //using System.Collections.Generic;

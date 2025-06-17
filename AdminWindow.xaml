@@ -62,7 +62,7 @@
                     FontWeight="Bold"
                     HorizontalAlignment="Center"
                     Margin="10"
-                    Click="SaveChangesButton_Click"/>
+                    Click="DeleteUserButton_Click"/>
 
             <ListBox x:Name="UsersListBox"
                      BorderThickness="1"
