@@ -96,7 +96,7 @@ namespace WpfDemoExam
             MessageBox.Show("Пожалуйста, выберите пользователя для изменения пароля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private async void DeleteUserButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveChangesButton_Click(object sender, RoutedEventArgs e)
         {
             if (UsersListBox.SelectedItem is StackPanel selectedItem)
             {
