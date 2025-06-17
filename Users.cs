@@ -21,6 +21,7 @@ namespace WpfDemoExam
         }
     
         public int id { get; set; }
+        public string login { get; set; }
         public string lastname { get; set; }
         public string firstname { get; set; }
         public string username { get; set; }
@@ -32,7 +33,8 @@ namespace WpfDemoExam
         public Nullable<bool> isLocked { get; set; }
         public Nullable<bool> firstLogin { get; set; }
         public Nullable<System.DateTime> lastLoginDate { get; set; }
-    
+        public string position { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cleaning_Schedule> Cleaning_Schedule { get; set; }
     }

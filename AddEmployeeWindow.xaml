@@ -1,12 +1,74 @@
 ﻿<Window x:Class="WpfDemoExam.AddEmployeeWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfDemoExam"
-        mc:Ignorable="d"
-        Title="AddEmployeeWindow" Height="450" Width="800">
-    <Grid>
-        
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:local="clr-namespace:WpfDemoExam"
+         mc:Ignorable="d"
+        Title="Добавление сотрудника" MinHeight="300" MinWidth="400" SizeToContent="WidthAndHeight" ResizeMode="CanResize">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF6EBFBF"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+    </Window.Resources>
+
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFBFFF7" Offset="0.0"/>
+            <GradientStop Color="Aquamarine" Offset="1.0"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Добавление сотрудника"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,10"/>
+
+        <StackPanel Grid.Row="1" Margin="10">
+            <TextBlock Text="Фамилия" FontWeight="Bold"/>
+            <TextBox x:Name="txtLastName" Width="250"/>
+
+            <TextBlock Text="Имя" FontWeight="Bold" Margin="0,10,0,0"/>
+            <TextBox x:Name="txtFirstName" Width="250"/>
+
+            <TextBlock Text="Должность" FontWeight="Bold" Margin="0,10,0,0"/>
+            <TextBox x:Name="txtPosition" Width="250"/>
+
+            <TextBlock Text="Роль" FontWeight="Bold" Margin="0,10,0,0"/>
+            <ComboBox x:Name="cmbRole" Width="250">
+                <ComboBoxItem Content="admin"/>
+                <ComboBoxItem Content="user" IsSelected="True"/>
+            </ComboBox>
+
+            <TextBlock Text="Логин" FontWeight="Bold" Margin="0,10,0,0"/>
+            <TextBox x:Name="txtLogin" Width="250"/>
+
+            <TextBlock Text="Пароль" FontWeight="Bold" Margin="0,10,0,0"/>
+            <PasswordBox x:Name="txtPassword" Width="250"/>
+        </StackPanel>
+
+        <Button Content="Добавить пользователя"
+                Grid.Row="5"
+                Width="200"
+                Height="40"
+                HorizontalAlignment="Center"
+                Margin="10"
+                Background="#FF6EBFBF"
+                BorderBrush="{x:Null}"
+                FontWeight="Bold"
+                Click="AddUserButton_Click"/>
     </Grid>
 </Window>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfDemoExam"
         mc:Ignorable="d"
-        Title="Панель администратора" MinHeight="350" MinWidth="550" SizeToContent="WidthAndHeight" ResizeMode="CanResize">
+        Title="Панель администратора" MinHeight="360" MinWidth="500" SizeToContent="WidthAndHeight" ResizeMode="CanResize">
 
     <Window.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -16,36 +16,60 @@
 
     <Grid Margin="20">
 
-        <DataGrid
-            x:Name="UsersListBox"
-            AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            Margin="10,10,10,50"
-            IsReadOnly="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" Width="Auto"/>
-                <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}" Width="Auto"/>
-                <DataGridTextColumn Header="Роль" Binding="{Binding Role}" Width="Auto"/>
-                <DataGridTextColumn Header="Логин" Binding="{Binding Username}" Width="Auto"/>
-                <DataGridComboBoxColumn Header="Статус" SelectedItemBinding="{Binding Status}" Width="Auto"/>
-            </DataGrid.Columns>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        </DataGrid>
+        <TextBlock Text="Панель Администратора"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   Margin="0, 10"
+                   FontFamily="Cascadia Code"/>
 
-        <StackPanel  HorizontalAlignment="Center" Margin="0,300,0,0">
-            <Button
-              Content="Сохранить изменения"
-              Width="220"
-              Height="35"
-              Background="#FF6EBFBF"
-              Foreground="Black"
-              FontFamily="Cascadia Code"
-              FontSize="16"
-              BorderThickness="0"
-              Cursor="Hand"
-              Margin="0 10 0 0" Click="SaveChangesButton_Click"/>
+        <StackPanel Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="500" Margin="0,10,0,0">
+            <Button Content="Добавить Сотрудника"
+                    Width="200"
+                    Height="40"
+                    Background="#FF6EBFBF"
+                    BorderBrush="{x:Null}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Center"
+                    Margin="10"
+                    Click="OpenAddEmployeeWindow"/>
+
+            <Button Content="Изменить Пароль"
+                    Width="200"
+                    Height="40"
+                    Background="#FF6EBFBF"
+                    BorderBrush="{x:Null}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Center"
+                    Margin="10"
+                    Click="OpenChangePasswordWindow"/>
+
+            <Button Content="Удалить Пользователя"
+                    Width="200"
+                    Height="40"
+                    Background="#FF6EBFBF"
+                    BorderBrush="{x:Null}"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Center"
+                    Margin="10"
+                    Click="SaveChangesButton_Click"/>
+
+            <ListBox x:Name="UsersListBox"
+                     BorderThickness="1"
+                     BorderBrush="{x:Null}"
+                     Background="#FFF0F0F0"
+                     Margin="10">
+            </ListBox>
         </StackPanel>
-
     </Grid>
 </Window>
-
