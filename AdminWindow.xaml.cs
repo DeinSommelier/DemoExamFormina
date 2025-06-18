@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Data.Entity;
+using WpfDemoExam;
 
 namespace WpfDemoExam
 {
@@ -168,3 +169,120 @@ namespace WpfDemoExam
 }
 
 
+
+//-- Таблица: Guests
+//CREATE TABLE Guests (
+//    id INT PRIMARY KEY IDENTITY,
+//    first_name NVARCHAR(255) NOT NULL,
+//    last_name NVARCHAR(255) NOT NULL,
+//    email NVARCHAR(255) NOT NULL,
+//    phone NVARCHAR(20) NOT NULL,
+//    document_number NVARCHAR(50) NOT NULL,
+//    check_in DATE,
+//    check_out DATE
+//);
+
+//--Таблица: Rooms
+//CREATE TABLE Rooms (
+//    id INT PRIMARY KEY IDENTITY,
+//    floor VARCHAR(255) NOT NULL,
+//    number INT NOT NULL,
+//    category NVARCHAR(255),
+//    status NVARCHAR(50)
+//);
+
+//--Таблица: Room_Access
+//CREATE TABLE Room_Access (
+//    id INT PRIMARY KEY IDENTITY,
+//    guest_id INT NOT NULL,
+//    room_id INT NOT NULL,
+//    access_card_code NVARCHAR(50),
+//    status NVARCHAR(50),
+//    FOREIGN KEY (guest_id) REFERENCES Guests(id),
+//    FOREIGN KEY (room_id) REFERENCES Rooms(id)
+//);
+
+//--Таблица: Users
+//CREATE TABLE Users (
+//    id INT PRIMARY KEY IDENTITY,
+//    lastname NVARCHAR(255) NOT NULL,
+//    firstname NVARCHAR(255) NOT NULL,
+//    username NVARCHAR(255) NOT NULL,
+//    role NVARCHAR(50) NOT NULL,
+//    email NVARCHAR(255),
+//    phone NVARCHAR(20),
+//    password NVARCHAR(255) NOT NULL,
+//    FailedLoginAttempts INT,
+//    isLocked BIT,
+//    firstLogin BIT,
+//    lastLoginDate DATETIME
+//);
+
+//--Таблица: Cleaning_Schedule
+//CREATE TABLE Cleaning_Schedule (
+//    id INT PRIMARY KEY IDENTITY,
+//    room_id INT NOT NULL,
+//    cleaning_date DATE,
+//    cleaner_id INT,
+//    status NVARCHAR(50),
+//    FOREIGN KEY (room_id) REFERENCES Rooms(id),
+//    FOREIGN KEY (cleaner_id) REFERENCES Users(id)
+//);
+
+//--Таблица: Statistics_hotel
+//CREATE TABLE Statistics_hotel (
+//    id INT PRIMARY KEY IDENTITY,
+//    date DATE NOT NULL,
+//    occupancy_rate DECIMAL(5,2),
+//    adr DECIMAL(10,2),
+//    revpar DECIMAL(10,2),
+//    revenue DECIMAL(10,2)
+//);
+
+//--Таблица: Integrations
+//CREATE TABLE Integrations (
+//    id INT PRIMARY KEY IDENTITY,
+//    name NVARCHAR(255) NOT NULL,
+//    integration_details NVARCHAR(MAX)
+//);
+
+//--Таблица: Services
+//CREATE TABLE Services (
+//    id INT PRIMARY KEY IDENTITY,
+//    name NVARCHAR(255) NOT NULL,
+//    price DECIMAL(10,2) NOT NULL,
+//    description NVARCHAR(MAX)
+//);
+
+//--Таблица: Reservations
+//CREATE TABLE Reservations (
+//    id INT PRIMARY KEY IDENTITY,
+//    guest_id INT NOT NULL,
+//    room_id INT NOT NULL,
+//    check_in_date DATE NOT NULL,
+//    check_out_date DATE NOT NULL,
+//    status NVARCHAR(50),
+//    FOREIGN KEY (guest_id) REFERENCES Guests(id),
+//    FOREIGN KEY (room_id) REFERENCES Rooms(id)
+//);
+
+//--Таблица: Payments
+//CREATE TABLE Payments (
+//    id INT PRIMARY KEY IDENTITY,
+//    reservation_id INT NOT NULL,
+//    amount DECIMAL(10,2),
+//    payment_date DATE NOT NULL,
+//    payment_method NVARCHAR(50) NOT NULL,
+//    FOREIGN KEY (reservation_id) REFERENCES Reservations(id)
+//);
+
+//--Таблица: Guest_Services
+//CREATE TABLE Guest_Services (
+//    id INT PRIMARY KEY IDENTITY,
+//    reservation_id INT NOT NULL,
+//    service_id INT NOT NULL,
+//    quantity INT NOT NULL,
+//    status NVARCHAR(50),
+//    FOREIGN KEY (reservation_id) REFERENCES Reservations(id),
+//    FOREIGN KEY (service_id) REFERENCES Services(id)
+//);
